@@ -1,0 +1,47 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.example.unity'
+    compileSdk 33
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 33
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.activity:activity:1.8.0-alpha05'
+    implementation 'androidx.fragment:fragment:1.7.0-alpha01'
+    implementation 'androidx.appcompat:appcompat:1.7.0-alpha02'
+    //implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+task copyPlugin(type: Copy){
+    dependsOn assemble
+    from('bundle/ouputs/aar')
+    into('C:/Users/makar/testLibrary/Assets/Plugins')
+    include(project.name + '-release.aar')
+}
