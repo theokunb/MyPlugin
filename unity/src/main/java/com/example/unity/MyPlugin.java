@@ -53,5 +53,57 @@ public class MyPlugin extends UnityPlayerActivity {
         SpeechRecognizer recognizer = SpeechRecognizer.createSpeechRecognizer(UnityPlayer.currentActivity);
 
         UnityPlayer.UnitySendMessage("CallbackReciever","RecieveSttResult","recognizer created");
+
+        RecognitionListener listener = new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle bundle) {
+                System.out.println("Ready for speech");
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+                System.out.println("Speech starting");
+            }
+
+            @Override
+            public void onRmsChanged(float v) {
+
+            }
+
+            @Override
+            public void onBufferReceived(byte[] bytes) {
+
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+
+            }
+
+            @Override
+            public void onError(int i) {
+                UnityPlayer.UnitySendMessage("CallbackReciever","RecieveSttResult", "error");
+            }
+
+            @Override
+            public void onResults(Bundle bundle) {
+                ArrayList data = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                String res = data.get(0).toString();
+                UnityPlayer.UnitySendMessage("CallbackReciever","RecieveSttResult", res);
+            }
+
+            @Override
+            public void onPartialResults(Bundle bundle) {
+
+            }
+
+            @Override
+            public void onEvent(int i, Bundle bundle) {
+
+            }
+        };
+
+        recognizer.setRecognitionListener(listener);
+        recognizer.startListening(intent);
     }
 }
